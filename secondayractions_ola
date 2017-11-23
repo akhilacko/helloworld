@@ -4,7 +4,7 @@ Call Center: Register claim - Customer call_Ola
 
 This task is for the call centre agent which is to be done when the customer calls to raise a claim request.
 
-<Script for the call centre agent to be updated>
+<Script for the call centre agent to be updated. Agent needs to ask for mobile number and email id.>
 tid
 call_centre_register_ola_claim_cust_call
 
