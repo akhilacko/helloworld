@@ -1,0 +1,968 @@
+Claims_Details_Ola
+
+As soon as the claim is generated and there are no documents or risk/vlaue associated with the claim, the task is triggered.
+Call center agent will perform this task and call the customer for claim details.
+
+tid
+claim_details_call_ola
+
+worker_role
+call_center_agent
+
+conditions
+claim_id = generated and documents_uploaded = NO
+
+assignment_Logic
+agent who generated claim_id 
+
+post_hook
+IF document_uploaded = NO and current_time - claim_generated_time > 6 hrs
+
+SMS to customer
+Hi, this is a gentle reminder for you to upload the required documents on the ola app for further processing of <policy_id> associated with Ola trip <CRN/Tripid>.
+You can also mail the same documents to <mail id> and we can take the process further.
+
+Email to customer
+Hi <CustomerName>,
+
+This is a gentle reminder for you to upload the required documents on the ola app for further processing of <policy_id> associated with Ola trip <CRN/Tripid>.
+You can go to Choose an issue ----> Claim insurance -----> select the type of claim you want ------> Upload the documents. And its done.
+We would further process your claim and get it processed as soon as possible.
+
+Thanks Team Acko
+
+Stage 1: Identify type of claim
+
+sid
+claim_type
+
+{
+		name: "VFloatTWidget",
+		show_action: "always",
+		title: "Type of Claim",
+
+}
+
+action_id
+accept_pre_inspection
+
+{
+		name: "AcceptTimerFWidget",
+		show_action: "always",
+		title: "Pre inspection"
+		wait_time: 60 seconds
+		fyi: true
+
+}
+preinspection_status = {
+		required: false
+		widget: HiddenFWidget
+		exact: "accepted_preinspection"
+
+}
+Stage 2: Reach Customer
+
+sid
+reach_customer
+
+{
+		name: "VFloatTWidget",
+		show_action: "always",
+		title: "Reach Customer"
+
+}
+Start Trip
+
+action_id
+start_trip
+
+preinspection_address = {
+		"name": "GeoLocationFWidget"
+		fyi: true
+
+}
+customer_name = {
+		widget: BoxLineInputFWidget
+		title: "Customer Name"
+		fyi: true
+}
+
+
+
+customer_email = {
+		widget: BoxLineInputFWidget
+		title: "Customer Email"
+		fyi: true
+}
+preinspection_status = {
+		required: false
+		widget: HiddenFWidget
+		exact: "trip_started"
+}
+Reached Customer
+
+action_id
+reached_customer
+
+preinspection_address = {
+		"name": "GeoLocationFWidget"
+		fyi: true
+}
+customer_name = {
+		widget: BoxLineInputFWidget
+		title: "Customer Name"
+		fyi: true
+
+}
+
+
+
+customer_email = {
+		widget: BoxLineInputFWidget
+		title: "Customer Email"
+		fyi: true
+
+}
+preinspection_status = {
+		required: false
+		widget: HiddenFWidget
+		exact: "reached_customer"
+}
+Stage 3: Verify proposal details
+
+sid
+verify_proposal_details
+
+{
+		name: "VFloatTWidget",
+		show_action: "always",
+		title: "Verify details".
+}
+Verify Proposal
+
+action_id
+verify_proposal
+
+customer_name = {
+		widget: BoxLineInputFWidget
+		title: "Customer Name"
+
+}
+
+
+
+customer_email = {
+		widget: BoxLineInputFWidget
+		title: "Customer Email"
+
+}
+
+
+
+
+Make = {
+		widget: BoxLineInputFWidget
+		title: "Make"
+
+}
+
+
+
+
+Model = {
+		widget: BoxLineInputFWidget
+		title: "Model"
+}
+
+
+
+variant = {
+		widget: BoxLineInputFWidget
+		title: "variant"
+
+}
+
+
+
+Color = {
+		widget: BoxLineInputFWidget
+		title: "Color"
+
+}
+
+
+
+Year_of_Manufacture = {
+		widget: BoxLineInputFWidget
+		title: "Year of manufacture"
+
+}
+
+
+
+Registration_Num = {
+		widget: BoxLineInputFWidget
+		title: "Registration Number"
+
+}
+
+
+
+Address = {
+		widget: BoxLineInputFWidget
+		title: "Address"
+
+}
+
+
+
+
+previous_policy_expiry = {
+		widget: BoxLineInputFWidget
+		title: "Previous policy expiry"
+
+}
+preinspection_status = {
+		required: false
+		widget: HiddenFWidget
+		exact: "verified_details"
+}
+Stage 4 : biker - photoshoot
+
+sid
+biker_photoshoot
+
+{
+		name: "VFloatTWidget",
+		show_action: "always",
+		title: "Photoshoot".
+}
+Submit photos
+
+action_id
+submit_photos
+
+fields
+front_bumper_grill = {
+		widget: ImageFWidget
+		title: "Front Bumper & Grill"
+		required: true
+
+}
+
+
+
+
+		head_lamp_lt = {
+		widget: ImageFWidget
+		title: "Head Lamp(LT)"
+		required: false
+
+}
+
+
+
+		head_lamp_rt = {
+		widget: ImageFWidget
+		title: "Head Lamp (RT)"
+		required:false
+
+}
+
+
+
+			indicator_light_lt = {
+		widget: ImageFWidget
+		title: "Indicator Light(LT)"
+		required:false
+
+}
+
+
+
+			indicator_light_rt = {
+		widget: ImageFWidget
+		title: "Indicator Light(RT)"
+		required:false
+
+}
+
+
+			fog_lamp_lt = {
+		widget: ImageFWidget
+		title: "Fog Lamp (LT)"
+		required:false
+
+}
+
+
+			fog_lamp_rt = {
+		widget: ImageFWidget
+		title: "Indicator Light(RT)"
+		required: false
+
+}
+
+
+
+
+			front_panel = {
+		widget: ImageFWidget
+		title: "Front Panel"
+		required: false
+
+}
+
+
+
+			bonnet = {
+		widget: ImageFWidget
+		title: "Bonnet"
+		required: true
+
+}
+
+
+
+			dicky = {
+		widget: ImageFWidget
+		title: "Dicky"
+		required: true
+
+}
+
+
+
+			rear_bumper = {
+		widget: ImageFWidget
+		title: "Rear Bumper"
+		required: true
+
+}
+
+
+		tail_lamp_lt = {
+		widget: ImageFWidget
+		title: "Tail Lamp (LT)"
+		required: false
+
+}
+
+
+
+		tail_lamp_rt = {
+		widget: ImageFWidget
+		title: "Tail Lamp (RT)"
+		required: false
+
+}
+
+
+
+		lt_front_fender = {
+		widget: ImageFWidget
+		title: "LT Front Fender"
+		required: true
+
+}
+
+
+
+		lt_front_door = {
+		widget: ImageFWidget
+		title: "LT Front Door"
+		required: true
+
+}
+
+
+
+		lt_rear_door = {
+		widget: ImageFWidget
+		title: "LT Rear Door"
+		required: true
+
+}
+
+
+
+		lt_running_board = {
+		widget: ImageFWidget
+		title: "LT Running Board"
+		required: false
+
+}
+
+
+
+			lt_quarter_panel = {
+		widget: ImageFWidget
+		title: "LT Quarter Panel"
+		required: true
+
+}
+
+
+
+		lt_pillar_door = {
+		widget: ImageFWidget
+		title: "LT Pillar Door(A)"
+		required: false
+
+}
+
+
+
+		lt_pillar_center = {
+		widget: ImageFWidget
+		title: "LT Pillar Centre(B)"
+		required: false
+
+}
+
+
+		lt_pillar = {
+		widget: ImageFWidget
+		title: "LT Pillar (C)"
+		required: false
+
+}
+
+
+		rear_view_mirror = {
+		widget: ImageFWidget
+		title: "Rear View Mirror(LT)"
+		required: false
+
+}
+
+
+
+		rt_front_fender = {
+		widget: ImageFWidget
+		title: "RT Front Fender"
+		required: true
+
+}
+
+
+
+		rt_quarter_panel = {
+		widget: ImageFWidget
+		title: "RT Quarter Panel"
+		required: true
+
+}
+
+
+
+		rt_rear_door = {
+		widget: ImageFWidget
+		title: "RT Rear Door"
+		required: true
+
+}
+
+
+
+		rt_front_door = {
+		widget: ImageFWidget
+		title: "RT Front Door"
+		required: true
+
+ }
+
+
+
+		rt_front_pillar = {
+		widget: ImageFWidget
+		title: "RT Front Pillar(A)"
+		required: false
+
+}
+
+
+
+
+		rt_center_pillar = {
+		widget: ImageFWidget
+		title: "RT Center Pillar(B)"
+		required: false
+
+}
+
+
+
+		rt_rear_pillar = {
+		widget: ImageFWidget
+		title: "RT Rear Pillar(C)"
+		required: false
+
+ }
+
+
+
+		rt_running_pboard = {
+		widget: ImageFWidget
+		title: "RT Running Board"
+		required: false
+
+}
+
+
+
+		floor_silencer = {
+		widget: ImageFWidget
+		title: "Floor / Silencer"
+		required: false
+
+}
+
+
+
+		rear_view_mirror = {
+		widget: ImageFWidget
+		title: "Rear View Mirror(RT)"
+		required: false
+
+}
+
+
+
+		rear_ws_glass = {
+		widget: ImageFWidget
+		title: "Rear W/S Glass"
+		required: true
+
+}
+
+
+
+		front_ws_glass = {
+		widget: ImageFWidget
+		title: "Front W/S Glass"
+		required: true
+
+}
+
+
+
+		rf_door_glass = {
+		widget: ImageFWidget
+		title: "RF Door Glass"
+		required: false
+
+}
+
+
+
+		rr_door_glass = {
+		widget: ImageFWidget
+		title: "RR Door Glass"
+		required: false
+
+}
+
+
+
+		lf_door_glass = {
+		widget: ImageFWidget
+		title: "LF Door Glass"
+		required: false
+
+}
+
+
+
+		lr_door_glass = {
+		widget: ImageFWidget
+		title: "LR Door Glass"
+		required: false
+
+}
+
+
+
+		rim = {
+		widget: ImageFWidget
+		title: "Rim"
+		required: false
+
+}
+
+
+
+		undercarriage = {
+		widget: ImageFWidget
+		title: "Undercarriage"
+		required: false
+
+}
+
+
+
+		left_front_tyre = {
+		widget: ImageFWidget
+		title: "Left front tyre"
+		required: false
+
+}
+
+
+
+
+		right_front_tyre = {
+		widget: ImageFWidget
+		title: "Right front tyre"
+		required: false
+
+}
+
+
+
+		left_rear_tyre = {
+		widget: ImageFWidget
+		title: "Left rear tyre"
+		required: false
+
+}
+
+
+
+		right_rear_tyre = {
+		widget: ImageFWidget
+		title: "Right rear tyre"
+		required: false
+
+}
+
+
+
+		roof = {
+		widget: ImageFWidget
+		title: "Roof"
+		required: true
+
+}
+
+
+
+
+		engine_number = {
+		widget: ImageFWidget
+		title: "Engine Number"
+		required: true
+
+}
+
+
+
+		chassis_number = {
+		widget: ImageFWidget
+		title: "Chassis Number"
+		required: true
+
+}
+
+
+
+		damage_area_closeup = {
+		widget: ImageFWidget
+		title: "Damage area closeup"
+		required: true
+
+}
+
+
+
+		odo_meter_reading = {
+		widget: ImageFWidget
+		title: "ODO meter reading"
+		required: true
+
+}
+
+
+		battery = {
+		widget: ImageFWidget
+		title: "Battery"
+		required: false
+
+}
+
+
+
+		music_system = {
+		widget: ImageFWidget
+		title: "Music System"
+		required: false
+
+}
+
+
+
+
+		engine_compartment = {
+		widget: ImageFWidget
+		title: "Engine Compartment"
+		required: true
+
+}
+
+
+
+		rc = {
+		widget: ImageFWidget
+		title: "RC or RC receipt"
+		required: false
+
+}
+
+
+
+		form_29_30 = {
+		widget: ImageFWidget
+		title: "Form 29/30"
+		required: false
+
+}
+
+
+
+		road_tax_token = {
+		widget: ImageFWidget
+		title: "Road Tax Token"
+		required: false
+
+}
+
+
+
+
+		expired_policy_copy = {
+		widget: ImageFWidget
+		title: "Expired Insurance Policy Copy"
+		required: false
+
+}
+
+
+
+		id_proof = {
+		widget: ImageFWidget
+		title: "Valid Id proof (Passport,  Aadhaar Card, Driving Licence, Voter's Identity Card,
+	    NREGA job card)"
+		required: false
+
+}
+
+
+		acknowledgement_letter = {
+		widget: ImageFWidget
+		title: "Acknowledgement Letter"
+		required: true
+
+}
+
+
+
+		misc1 = {
+		widget: ImageFWidget
+		title: "Misc 1"
+		required: false
+
+}
+
+
+
+
+		misc2 = {
+		widget: ImageFWidget
+		title: "Misc 2"
+		required: false
+
+}
+
+
+
+		misc3 = {
+		widget: ImageFWidget
+		title: "Misc 3"
+		required: false
+
+}
+
+
+
+		misc4 = {
+		widget: ImageFWidget
+		title: "Misc 4"
+		required: false
+
+}
+
+
+
+		misc5 = {
+		widget: ImageFWidget
+		title: "Misc 5"
+		required: false
+
+}
+preinspection_status = {
+		required: false
+		widget: HiddenFWidget
+		exact: "photoshoot_done"
+}
+Stage 5: Rate customer
+
+sid
+rate_customer
+
+{
+		name: "VFloatTWidget",
+		show_action: "always",
+		title: "Rate Customer".
+}
+Rate customer
+
+action_id
+rate_customer
+
+{
+		name: "ratingFWidget",
+		show_action: "always",
+		title: "Rate customer"
+}
+preinspection_status = {
+		required: false
+		widget: HiddenFWidget
+		exact: "rated_customer"
+}
+Approver: Assess car and document photos
+
+tid
+approval_process
+
+worker_role
+inspection-approver
+
+conditions
+preinspection_status= approval_pending
+
+assignment_Logic
+evenly distributed amongst approvers who are online
+
+post_hooks
+If preinspection_status=approval_done and policy_status = approved.
+
+ If damage status of one or more car parts is not intact, include them in exclusions.
+Email/SMS will also include list of missing required documents.
+- SMS to customer
+Hi <CustomerName>, Your vehicle’s inspection is approved. You can download report here {link}. You can pay by clicking on this link {link}
+
+- Email to customer
+Hi <salutation><CustomerName>
+
+Your vehicle’s inspection is approved. You can download report here {link}. Y ou can use the following link {link} to make payment.
+
+Thanks Team Acko <Include customer toll free number in signature>
+
+If preinspection_status=approval_done and policy_status=rejected.
+
+SMS to customer:: Your vehicle’s inspection is approved. You can download report here {link}. Your refund has been initiated, it will be credited back to your account within X working days
+
+Email to customer::
+
+Hi <Salutation><CustomerName>
+
+Your vehicle’s inspection is not approved. You can download the inspection report here {link}.
+
+Thanks Team Acko <Include customer toll free number in signature>
+
+If preinspection_status=approval_done and policy_status = rejected.
+
+SMS to customer:: We are sorry to inform your vehicle’s inspection is not approved. You can download report here {link}.
+
+Email to customer::
+
+Hi <Salutation><CustomerName>
+
+We are sorry to inform your vehicle’s inspection is not approved. You can download the inspection report here {link}.
+
+Thanks Team Acko <Include customer toll free number in signature>
+
+Stage 1: Check car and document photos
+
+sid
+check_car_document_photos
+
+{
+		name: "VFloatTWidget",
+		show_action: "always",
+		title: "Assessment".
+}
+Mark Damage Status
+
+action_id
+mark_damage_status
+
+widget = {
+    	name: "AssessmentFWidget",
+    	title: "Assessment ",
+}
+[Assessment Widget]
+
+preinspection_status = {
+		required: false
+		widget: HiddenFWidget
+		exact: "approved"
+}
+Stage 2: Approve or reject policy
+
+sid
+approve_reject_policy
+
+{
+		name: "VFloatTWidget",
+		show_action: "always",
+		title: "Assessment".
+		fyi:true
+}
+Approve policy
+
+action_id
+approve_policy
+
+widget = {
+    	name: "AssessmentFWidget",
+    	title: "Assessment ",
+}
+preinspection_status = {
+		required: false
+		widget: HiddenFWidget
+		exact: "approval_done"
+}
+policy_status = {
+		required: false
+		widget: HiddenFWidget
+		exact: "approved"
+Reject policy
+
+action_id
+reject_policy
+
+widget = {
+    	name: "AssessmentFWidget",
+    	title: "Assessment ",
+}
+preinspection_status = {
+		required: false
+		widget: HiddenFWidget
+		exact: "approval_done"
+}
+policy_status = {
+		required: false
+		widget: HiddenFWidget
+		exact: "rejected"
+}
