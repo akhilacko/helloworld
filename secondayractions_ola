@@ -81,7 +81,7 @@ OlatripId = {
 	widget: "TextBoxFWidget",
 	title: "Ola Trip CRN",
 	required: true,
-  fyi: true
+  	fyi: true
 }
 
 Customer_name = {
@@ -94,5 +94,10 @@ Ride_type = {
 	widget: "TextBoxFWidget",
 	title: "Type of Ride",
 	required: true,
-  fyi: true
+  	fyi: true
 }
+
+documents_uploaded = {
+	widget: "HiddenFWidget"
+	exact : No
+}	
