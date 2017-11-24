@@ -1,0 +1,318 @@
+Task
+
+Call Center: Register claim - Customer call_Ola
+
+This task is for the call centre agent which is to be done when the customer calls to raise a claim request.
+this task will be performed in 8 stages.
+
+Stage 1: Agent will ask for relevant details and register claim
+Stage 2: Agent will inform customer about documents need to be uploaded for further process of claim 
+depending upon the claim type. This is when claim_type = Accident Claim
+Stage 3: After stage 1 is finished, agent will ask customer about relevant information about the claim. 
+This stage is triggered when claim_type = Accident_Claim
+Stage 4: If the sub_type = Death or Disability when claim_type = Accident_Claim, then call center agent will inform customer about relevant information
+and documents to be uploaded.
+Stage 5: Agent will inform customer about documents need to be uploaded for further process of claim 
+depending upon the claim type. This is when claim_type = Missed Flight
+Stage 6: Agent will inform customer about documents need to be uploaded for further process of claim 
+depending upon the claim type. This is when claim_type = Theft/Loss of Baggage
+Stage 7: Agent will inform customer about documents need to be uploaded for further process of claim 
+depending upon the claim type. This is when claim_type = Theft/Fire at home
+Stage 8: Agent will inform customer about documents need to be uploaded for further process of claim 
+depending upon the claim type. This is when claim_type = Emergency Stay
+
+<Script for the call centre agent to be updated>
+tid
+call_centre_register_ola_claim_cust_call
+
+worker_role
+call_centre_agent
+
+widget
+{
+	name: "VFloatTWidget",
+	show_action: "always",
+	title: "Register New Ola Claim - Call"
+}
+assignment_logic
+not applicable
+
+post_hook
+generate claim_id
+
+update claim_reg_date_time to current date time
+
+set claim_status equal to new_claim_ola
+
+send sms to customer’s mobile number
+
+Hi, we have received your request for a claim against Policy ID <policy_id> taken on Ola ride <Ola trip ID/CRN>. 
+Your claim id is <claim_id> registed on <claim_date>. We will process your claim once all the information is uploaded and reviewed.
+
+send email to customer’s registered mail id
+
+Hello Mr. <customer_name>,
+We have registered your request for a claim against the policy <policy_id> taken on Ola ride <Ola trip ID/CRN>. 
+The claim <claim_id> has been generated and we will process your claim once all the informatio is uploaded and reviewed. You can contact us anytime on our customer care number <customer care no> with this claim id.
+Please feel free to contact us via our toll free number or write to us as care@acko.com.
+Team Acko
+
+stage 1
+
+stageid
+claim_registration_on_call_ola
+
+Register New Ola Claim
+
+This is the button the user (call_centre_agent) will see when he/ she fills all the mandatory fields on the screen. Claim ID will be generated at the end of this stage.
+
+actionid
+register_new_ola_claim_customer_call
+
+policy_id = {
+	widget: "TextBoxFWidget",
+	title: "Policy",
+	required: true,
+	fyi: true
+}
+
+phone_number = {
+	widget: "TextBoxFWidget",
+	title: "Phone Number",
+	required: true
+}
+
+email_id = {
+	widget: "TextBoxFWidget",
+	title: "Email Address",
+	required: true
+}
+
+incident_date_time = {
+	widget: "DateTimeFWidget",
+	title: "Incident Date and Time",
+	required: true
+}
+
+OlatripId = {
+	widget: "TextBoxFWidget",
+	title: "Ola Trip CRN",
+	required: true,
+  	fyi: true
+}
+
+Customer_name = {
+	widget: "TextBoxFWidget",
+	title: "Customer Name",
+	required: false
+}
+
+Ride_type = {
+	widget: "TextBoxFWidget",
+	title: "Type of Ride",
+	required: true,
+  	fyi: true
+}
+
+claim_type = {
+	widget: "VStackedButtonsFWidget",
+	title: "Type of claim",
+	required: true,
+	choices: [
+		{name: "Accident Claim", value = "Accident_Claim"},
+		{name: "Missed Flight", value = "Missed_Flight"},
+		{name: "Theft/Loss of Baggage", value = "Theft_baggage_loss"},
+		{name: "Theft/Fire at home", value = "Theft_Fire_at_home"},
+		{name: "Emergency Hotel Stay", value = "Emergency_Hotel_Stay"}
+}
+
+documents_uploaded = {
+	widget: "HiddenFWidget"
+	exact : No
+}	
+
+Stage2
+
+After stage 1 is finished, agent will ask customer about relevant information about the claim. 
+This stage is triggered when claim_type = Accident_Claim
+
+conditions
+claim_type = Accident_Claim and documents_uploaded = NO
+
+sid = ola_call_accident_claim
+
+actionid
+register_new_ola_accident_claim
+
+sub_type = {
+	widget: "VStackedButtonsFWidget",
+	title: "Type of accident claim",
+	required: true,
+	choices: [
+		{name: "Hospitalisation/Previous accident", value = "Hospitalisation"},
+		{name: "Death", value = "Death"},
+		{name: "Disability", value = "Disability"},
+		{name: "On Spot Accident", value = "On_spot_accident"}
+}
+
+Stage 3: If the accident_type = Hospitalisation, agent will inform user to go to acko website, select the CRN number for claim and upload relevant documents. 
+Customer can also go to choose an issue on ola app, claim insurance and proceed to upload documents.
+Agent will ask for bill amount and customer can upload the discharge voucher and payment receipt.
+
+conditons
+sub_type = Hospitalisation
+
+sid = ola_call_hospitalisation_claim
+
+actionid
+register_new_ola__hospitalisation_accident_claim
+
+discharge_voucher = {
+	widget: "TextBoxFWidget",
+	title: "Discharge voucher",
+	fyi: true
+}
+
+bill_amount = {
+	widget: "TextBoxFWidget",
+	title: "Bill Amount",
+	required: true
+}
+
+payment_receipt = {
+	widget: "TextBoxFWidget",
+	title: "Payment receipt",
+	fyi: true
+}
+
+Stage 4: If the sub_type = Death or Disability, then call center agent will inform customer about relevant information
+and documents to be uploaded.
+
+conditons
+sub_type = Death or Disability
+
+sid = ola_call_Death_Disability_claim
+
+actionid
+register_new_ola__Death_Disability_accident_claim
+
+death_certificate = {
+	widget: "TextBoxFWidget",
+	title: "Death Certificate",
+	fyi: true
+}
+
+disability_certificate = {
+	widget: "TextBoxFWidget",
+	title: "Disability Certificate",
+	fyi: true
+}
+
+Stage 5
+After stage 1 is finished, agent will ask customer about relevant information about the claim. 
+This stage is triggered when claim_type = Missed_Flight
+Call center agent will ask for relevant information to register this claim.
+
+conditons
+claim_type = Missed_flight and ride_type = Airport
+
+sid = ola_call_missed_flight_claim
+
+actionid
+register_new_ola_missed_flight_claim
+
+flight_PNR = {
+	widget: "TextBoxFWidget",
+	title: "Flight PNR",
+	required: true
+}
+
+customer_name = {
+	widget: "TextBoxFWidget",
+	title: "Customer Name",
+	required: false
+}
+
+flight_name = {
+	widget: "TextBoxFWidget",
+	title: "Flight Name",
+	required: true 
+}
+
+Stage 6 
+After stage 1 is finished, agent will ask customer about relevant information about the claim. 
+This stage is triggered when claim_type = Theft_baggage_loss
+Call center agent will ask for relevant information to register this claim.
+Call center will also inform user to go to acko app and upload the pictures for quicker processing of claim.
+
+conditions
+claim_type = Theft_baggage_loss
+
+sid = ola_Theft_baggage_loss_claim
+
+actionid
+register_new_ola_Theft_baggage_loss_claim
+
+value_of_goods = {
+	widget: "TextBoxFWidget",
+	title: "Value of Goods",
+	required: true
+}
+
+FIR = {
+	widget: "TextBoxFWidget",
+	title: "FIR for the loss",
+	fyi: true
+}
+
+Stage 7
+After stage 1 is finished, agent will ask customer about relevant information about the claim. 
+This stage is triggered when claim_type = Theft_Fire_at_home
+Call center agent will ask for relevant information to register this claim.
+Call center will also inform user to go to acko app and upload the pictures for quicker processing of claim.
+
+conditions
+claim_type = Theft_Fire_at_home and ride_type = outstation
+
+sid = ola_Theft_Fire_at_home_claim
+
+actionid
+register_new_ola_Theft_Fire_at_home_claim
+
+value_of_goods = {
+	widget: "TextBoxFWidget",
+	title: "Value of Goods",
+	required: true
+}
+
+FIR = {
+	widget: "TextBoxFWidget",
+	title: "FIR for the loss",
+	fyi: true
+}
+
+Stage 8
+After stage 1 is finished, agent will ask customer about relevant information about the claim. 
+This stage is triggered when claim_type = Emergency_Hotel_Stay
+Call center agent will ask for relevant information to register this claim.
+Call center will also inform user to go to acko app and upload the pictures for quicker processing of claim.
+
+conditions
+claim_type = Emergency_Hotel_Stay and ride_type = outstation
+
+sid = ola_Emergency_Hotel_Stay_claim
+
+actionid
+register_new_ola_Emergency_Hotel_Stay_claim
+
+cost_of_stay = {
+	widget: "TextBoxFWidget",
+	title: "Cost of the stay",
+	required: true
+}
+
+bill_voucher = {
+	widget: "TextBoxFWidget",
+	title: "Payment receipt ",
+	fyi: true
+}
